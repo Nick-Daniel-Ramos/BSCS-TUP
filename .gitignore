@@ -1,0 +1,13 @@
+.vscode/
+.idea/
+.venv/
+.zip
+.o
+.exe
+.txt
+.csv
+.class
+.png
+.jpeg
+.jpg
+.json
