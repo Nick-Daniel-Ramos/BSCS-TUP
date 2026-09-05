@@ -5,6 +5,8 @@
 #include<cstdlib>
 #include<string>
 #include<iomanip>
+#include<fstream>
+#include<sstream>
 
 using namespace std;
 
@@ -67,6 +69,8 @@ public:
     void del(string n);
     void update(string n);
     void display();
+    void save();
+    void retrieve();
 };
 
 int menu()
@@ -215,11 +219,65 @@ void Student::display()
     system("pause");
 }
 
+void Student::save()
+{
+    ofstream file("sample.csv");
+    if(!file)
+    {
+        cout << "File error" << endl;
+        return;
+    }
+    Node *p = head;
+    while (p != NULL)
+    {
+        file << p->data.name << ","
+        << p->data.quiz1 << ","
+        << p->data.quiz2 << ","
+        << p->data.quiz3 << endl;
+        p = p->next;
+    }
+    file.close();
+}
+
+void Student::retrieve()
+{
+    ifstream file("sample.csv");
+
+    if(!file)
+    {
+        cout << "File error" << endl;
+        return;
+    }
+    string line;
+    string sq1, sq2, sq3;
+
+    Record N;
+    while (getline(file, line))
+    {
+        if(line.empty())
+        {
+            continue;
+        }
+        stringstream ss(line);
+
+        getline(ss, N.name, ',');
+        getline(ss, sq1, ',');
+        getline(ss, sq2, ',');
+        getline(ss, sq3, ',');
+        N.quiz1 = stoi(sq1);
+        N.quiz2 = stoi(sq2);
+        N.quiz3 = stoi(sq3);
+        add(N);
+    }
+    file.close();
+}
+
 
 int main()
 {
     Student mClass;
     Record mData;
+    mClass.retrieve();
 
     while (true)
     {
@@ -227,6 +285,7 @@ int main()
         {
         case 0:
             cout << "Exiting..." << endl;
+            mClass.save();
             exit(0);
             break;
         case 1:
